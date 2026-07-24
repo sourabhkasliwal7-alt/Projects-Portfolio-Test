@@ -1,6 +1,15 @@
-import { ProjectCard, type Project } from "@/components/project-card"
+import { type Project } from "@/components/project-card"
+import { ProjectSection } from "@/components/project-section"
+import { ProjectNav } from "@/components/project-nav"
 
 const projects: Project[] = [
+  {
+    title: "AI Healthcare Automation Platform",
+    description:
+      "An AI-powered healthcare platform built with Large Language Models (LLMs) and specialized AI agents to automate clinical workflows. It retrieves patient information, assists with medical forms, generates reminders, and supports Prior Authorization while keeping all final actions under human approval. Includes AI Scribe for voice transcription and automatic form filling, a Rules Engine for critical patient alerts, and intelligent workflows for MAR, TAR, and POC to track medications, treatments, care activities, overdue tasks, and automated follow-ups.",
+    techStack: ["LLM", "AI Agents", "RAG", "React", "Next.js", "TypeScript", "Node.js", "REST APIs", "SQL Database", "Workflow Automation"],
+    liveLink: "https://drive.google.com/drive/folders/13jq0vP5w6199RBOakUdPG0yRC0SwmpEA",
+  },
   {
     title: "Talbot Health Services",
     description:
@@ -269,6 +278,162 @@ const projects: Project[] = [
   }
 ]
 
+/* ──────────────────────────────────────────────────────────
+   Categorization
+   Projects are grouped automatically by their primary tech.
+   To move a project, adjust its techStack — no layout edits.
+   Empty categories are hidden from both the nav and the page.
+   ────────────────────────────────────────────────────────── */
+type CategoryKey =
+  | "ai"
+  | "react"
+  | "nextjs"
+  | "wordpress"
+  | "shopify"
+  | "fullstack"
+  | "nodejs"
+  | "python"
+  | "automation"
+  | "opensource"
+  | "other"
+
+const CATEGORIES: {
+  key: CategoryKey
+  emoji: string
+  navLabel: string
+  title: string
+  blurb: string
+}[] = [
+  {
+    key: "ai",
+    emoji: "🤖",
+    navLabel: "AI Projects",
+    title: "AI Projects",
+    blurb: "AI agents, RAG, LangChain, LLM apps, automation & NLP",
+  },
+  {
+    key: "react",
+    emoji: "⚛️",
+    navLabel: "React.js",
+    title: "React.js Applications",
+    blurb: "React single-page apps & interactive frontends",
+  },
+  {
+    key: "nextjs",
+    emoji: "🟣",
+    navLabel: "Next.js",
+    title: "Next.js Applications",
+    blurb: "Server-rendered, SEO-ready Next.js products",
+  },
+  {
+    key: "wordpress",
+    emoji: "🟦",
+    navLabel: "WordPress",
+    title: "WordPress Websites",
+    blurb: "Custom themes, Elementor & WooCommerce builds",
+  },
+  {
+    key: "shopify",
+    emoji: "🛍️",
+    navLabel: "Shopify",
+    title: "Shopify Stores",
+    blurb: "DTC e-commerce storefronts & headless commerce",
+  },
+  {
+    key: "fullstack",
+    emoji: "🌐",
+    navLabel: "Full Stack",
+    title: "Full Stack Applications",
+    blurb: "Laravel, databases & APIs — front to back",
+  },
+  {
+    key: "nodejs",
+    emoji: "🟢",
+    navLabel: "Node.js",
+    title: "Node.js Applications",
+    blurb: "Node-powered services & real-time platforms",
+  },
+  {
+    key: "python",
+    emoji: "🐍",
+    navLabel: "Python",
+    title: "Python Projects",
+    blurb: "Python services, data & scripting",
+  },
+  {
+    key: "automation",
+    emoji: "⚡",
+    navLabel: "Automation",
+    title: "Automation",
+    blurb: "Workflow automation & no-code pipelines",
+  },
+  {
+    key: "opensource",
+    emoji: "📦",
+    navLabel: "Open Source",
+    title: "Open Source",
+    blurb: "Public libraries & community projects",
+  },
+  {
+    key: "other",
+    emoji: "📱",
+    navLabel: "Other",
+    title: "Other Projects",
+    blurb: "No-code site builders & experiments",
+  },
+]
+
+function classify(project: Project): CategoryKey {
+  const haystack = [project.title, ...project.techStack].join(" ").toLowerCase()
+  const has = (...terms: string[]) =>
+    terms.some((t) => haystack.includes(t.toLowerCase()))
+
+  // 1. AI wins over everything.
+  if (
+    has(
+      "llm", "langchain", "langgraph", "rag", "nlp", "openai",
+      "chatbot", "vector db", "pinecone", "ml/ai",
+    ) ||
+    /\bai\b/.test(haystack)
+  ) {
+    return "ai"
+  }
+
+  // 2. Shopify gets its own dedicated section — never nested elsewhere.
+  if (has("shopify")) return "shopify"
+
+  // 3. WordPress builds.
+  if (has("wordpress", "elementor", "woocommerce", "woodmart")) return "wordpress"
+
+  // 4. Backend-heavy apps (a DB or server framework in the stack) => full stack.
+  if (
+    has("laravel", "nest.js", "express", "mongodb", "mysql", "postgres", "microservices")
+  ) {
+    return "fullstack"
+  }
+
+  // 5. Standalone Python / automation.
+  if (has("python", "django", "flask", "fastapi")) return "python"
+  if (has("n8n", "zapier", "make.com")) return "automation"
+
+  // 6. Framework buckets.
+  if (has("next.js")) return "nextjs"
+  if (has("node.js")) return "nodejs"
+  if (has("react")) return "react"
+
+  return "other"
+}
+
+const groupedProjects = CATEGORIES.map((category) => ({
+  ...category,
+  items: projects.filter((project) => classify(project) === category.key),
+})).filter((group) => group.items.length > 0)
+
+const navCategories = [
+  { key: "all", label: "All" },
+  ...groupedProjects.map((g) => ({ key: g.key, label: g.navLabel, emoji: g.emoji })),
+]
+
 export default function Page() {
   return (
     <main className="min-h-screen bg-background">
@@ -304,17 +469,25 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── Project Grid ── */}
-      <section
+      {/* ── Sticky category navigation with scroll spy ── */}
+      <ProjectNav topId="projects-top" categories={navCategories} />
+
+      {/* ── Projects grouped by technology ── */}
+      <div
+        id="projects-top"
         aria-label="Project showcase"
-        className="max-w-6xl mx-auto px-6 pb-28"
+        className="max-w-6xl mx-auto px-6 pt-16 pb-28 space-y-20 sm:space-y-24 scroll-mt-20"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-          {projects.map((project) => (
-            <ProjectCard key={project.title} project={project} />
-          ))}
-        </div>
-      </section>
+        {groupedProjects.map((group) => (
+          <ProjectSection
+            key={group.key}
+            id={`cat-${group.key}`}
+            title={group.title}
+            blurb={group.blurb}
+            projects={group.items}
+          />
+        ))}
+      </div>
     </main>
   )
 }

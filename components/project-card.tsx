@@ -20,6 +20,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className="h-full"
     >
       <article className="group flex flex-col h-full rounded-2xl border border-border bg-card/80 backdrop-blur bg-clip-padding p-7 shadow-inner transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-foreground/20">
         {/* Title */}
@@ -61,9 +62,15 @@ export function ProjectCard({ project }: ProjectCardProps) {
               <ExternalLink className="w-3.5 h-3.5 shrink-0" />
             </a>
           ) : (
-            <span className="text-sm text-muted-foreground">
-              Private Project
-            </span>
+            <div>
+              <span className="text-sm font-medium text-card-foreground">
+                Private Project
+              </span>
+              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                This project is private due to client confidentiality. Project
+                details cannot be shared without the client&apos;s permission.
+              </p>
+            </div>
           )}
         </div>
       </article>
