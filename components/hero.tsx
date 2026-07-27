@@ -50,7 +50,7 @@ export function Hero() {
                   alt={PROFILE_ALT}
                   priority
                   sizes="(min-width: 1024px) 480px, (min-width: 640px) 340px, 300px"
-                  className="block w-full h-auto grayscale transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:scale-[1.03]"
+                  className="block w-full h-auto transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                 />
               </div>
 
