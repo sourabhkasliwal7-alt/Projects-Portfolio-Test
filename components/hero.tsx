@@ -1,5 +1,5 @@
 import Image from "next/image"
-import profilePhoto from "@/public/Media (2).png"
+import profilePhoto from "@/public/Media.png"
 import { CountUp } from "@/components/count-up"
 
 /* ──────────────────────────────────────────────────────────
