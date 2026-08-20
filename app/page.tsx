@@ -276,6 +276,13 @@ const projects: Project[] = [
     description:
       "A customer-facing web portal for Roadrunner Transportation, a nationwide LTL (Less-Than-Truckload) freight carrier with 32 service centers. The platform lets shippers get instant freight quotes, book shipments, and manage the full logistics workflow — including real-time shipment tracking, transit time and density calculators, bill of lading management, a multi-shipment quote cart, service center locator, label maker, pickup scheduling, online payment, and a document/reports download center. Fully responsive with authenticated dashboards for account holders.",
     techStack: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+  },
+  {
+    title: "Rootelo — Verified Student Community (Canada)",
+    description:
+      "Canada's first verified student community platform, where students connect by college, city, language, and interests. Built the early-access funnel, founding-member onboarding, and a privacy-first architecture that keeps identity data minimal and verified. Currently pre-launch with a live waitlist and an active founding-member program.",
+    techStack: ["Next.js", "React", "Vercel", "Community Platform"],
+    liveLink: "https://rootelo-app.vercel.app/",
   }
 ]
 
