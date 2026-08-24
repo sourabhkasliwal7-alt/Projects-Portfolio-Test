@@ -283,6 +283,41 @@ const projects: Project[] = [
       "Canada's first verified student community platform, where students connect by college, city, language, and interests. Built the early-access funnel, founding-member onboarding, and a privacy-first architecture that keeps identity data minimal and verified. Currently pre-launch with a live waitlist and an active founding-member program.",
     techStack: ["Next.js", "React", "Vercel", "Community Platform"],
     liveLink: "https://rootelo-app.vercel.app/",
+  },
+  {
+    title: "StoreReportAI — Author & AI Business Hub",
+    description:
+      "A dual-identity site for a retail-AI founder and author, pairing a business hub and a personal content hub on a single WordPress build. An n8n pipeline reads each new post, classifies it with AI, and routes it to the right blog automatically. The result is a zero-touch content pipeline — publishing runs end to end with no manual sorting or intervention.",
+    techStack: ["WordPress", "Elementor", "n8n Automation", "AI Classification"],
+    liveLink: "https://storereportai.com/",
+  },
+  {
+    title: "Dudiez Dashboard — UI/UX Design",
+    description:
+      "A complete dashboard interface design covering information architecture, data-dense screen layouts, a component system, and interaction states built for day-to-day operational use. Delivered as a full dashboard UI kit in Figma — screens, components, and states.",
+    techStack: ["Figma", "UI/UX", "Component Library", "Auto-layout"],
+    liveLink: "https://www.figma.com/design/TcQBFPlzMga8gq9zEfjsUL/DudiezDashboard-UI?node-id=0-1",
+  },
+  {
+    title: "Wiki Cards — Design System Components",
+    description:
+      "A card-based knowledge interface built on reusable card components, a considered typography scale, and content patterns designed for scannable, wiki-style information display. Delivered as a card component system in Figma.",
+    techStack: ["Figma", "Design System", "Components"],
+    liveLink: "https://www.figma.com/file/0uyPhWpTTg98chVsYEhLPL/Wiki-Cards?type=design&node-id=521-477",
+  },
+  {
+    title: "YouVah — EdTech Platform UI",
+    description:
+      "Interface design for YouVah, an internship and upskilling platform for teenagers. Covers onboarding flows, program discovery, and learner-facing screens designed for a young audience. Delivered as platform UI screens and flows in Figma.",
+    techStack: ["Figma", "UX Flows", "Mobile-first Design"],
+    liveLink: "https://www.figma.com/file/XIc8h2T2BbtjZuuzfZUGsk/YouVah?type=design&node-id=0-1",
+  },
+  {
+    title: "Kapable — Product UI Redesign",
+    description:
+      "A new UI for Kapable, a leadership and communication training platform — refreshed visual language, learning-journey screens, and a component library for the product's next iteration. Delivered as a full product redesign in Figma.",
+    techStack: ["Figma", "UI Redesign", "Component Library"],
+    liveLink: "https://www.figma.com/file/zKS5smyQOlYLITfJMDGqn9/Kapable-New-UI?type=design&node-id=0-1",
   }
 ]
 
@@ -302,6 +337,7 @@ type CategoryKey =
   | "nodejs"
   | "python"
   | "automation"
+  | "figma"
   | "opensource"
   | "other"
 
@@ -376,6 +412,13 @@ const CATEGORIES: {
     blurb: "Workflow automation & no-code pipelines",
   },
   {
+    key: "figma",
+    emoji: "🎨",
+    navLabel: "Figma",
+    title: "Figma & UI/UX Design",
+    blurb: "Interface design, wireframes, prototypes & design systems",
+  },
+  {
     key: "opensource",
     emoji: "📦",
     navLabel: "Open Source",
@@ -412,6 +455,13 @@ function classify(project: Project): CategoryKey {
 
   // 3. WordPress builds.
   if (has("wordpress", "elementor", "woocommerce", "woodmart")) return "wordpress"
+
+  // 3b. Design work gets its own dedicated section too.
+  //     Terms stay long on purpose: has() is a substring match, so a bare
+  //     "ui" would swallow "Builder", "Suite", "built"...
+  if (has("figma", "ui/ux", "wireframe", "prototype", "design system", "adobe xd")) {
+    return "figma"
+  }
 
   // 4. Backend-heavy apps (a DB or server framework in the stack) => full stack.
   if (
